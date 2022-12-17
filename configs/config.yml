@@ -1,0 +1,12 @@
+port : "8080"
+
+db:
+  username: "postgres"
+  host : "localhost"
+  port : "5432"
+  dbname : "postgres"
+  sslmode : "disable"
+  password : "postgres"
+
+tg:
+  bot-token : "5723433072:AAFare5OzZ2TSqQsmLgOKn_YAJJXs8yJ4M4"

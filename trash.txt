@@ -1,0 +1,419 @@
+/*switch update.Message.Text {
+
+case "Генерация подписи":
+reply := "Тип языка?"
+msg := tgbotapi.NewMessage(update.Message.Chat.ID, reply)
+bot.Send(msg)
+
+case "Обратиться в тех поддержку":
+reply := "Выберите тип проблемы, с которой вы столкнулись"
+msg := tgbotapi.NewMessage(update.Message.Chat.ID, reply)
+//msg.ReplyMarkup = KeyBoard
+bot.Send(msg)
+
+case "Интеграция":
+reply := "Опишите вашу проблему, если описали проблему полностью, " +
+"то нажмите на плитку с надписью ..."
+msg := tgbotapi.NewMessage(update.Message.Chat.ID, reply)
+//msg.ReplyMarkup = PostKeyBoard
+bot.Send(msg)
+
+case "Тесты":
+reply := "Опишите вашу проблему, если описали проблему полностью, " +
+"то нажмите на плитку с надписью ..."
+msg := tgbotapi.NewMessage(update.Message.Chat.ID, reply)
+//msg.ReplyMarkup = PostKeyBoard
+RequestToTestSpec(msg, update, bot)
+//bot.Send(msg)
+
+case "Трафик":
+reply := "Опишите вашу проблему, если описали проблему полностью, " +
+"то нажмите на плитку с надписью ..."
+msg := tgbotapi.NewMessage(update.Message.Chat.ID, reply)
+//msg.ReplyMarkup = PostKeyBoard
+bot.Send(msg)
+
+case "Отправить запрос":
+reply := "Запрос отправлен, в скором времени мы свяжемся с вами! \n" +
+"Хорошего дня!"
+
+msg := tgbotapi.NewMessage(update.Message.Chat.ID, reply)
+//msg = tgbotapi.NewMessageToChannel("715663139", "test")
+msg = tgbotapi.NewMessageToChannel("1661385575", "test")
+//msg.ReplyMarkup = StartKeyBoard
+bot.Send(msg)
+}*/
+
+
+
+if update.Message != nil {
+
+			/*msg := tgbotapi.NewMessage(update.Message.Chat.ID, update.Message.Text)
+			msg.ReplyMarkup = StartKeyBoard*/
+			switch update.Message.Command() {
+			case "start":
+				replay := "Приветствую"
+				msg := tgbotapi.NewMessage(update.Message.Chat.ID, replay)
+				msg.ReplyMarkup = StartKeyBoard
+				if _, err = bot.Send(msg); err != nil {
+					panic(err)
+				}
+			}
+			switch update.Message.Text {
+			case "Отправить запрос":
+				reply := "Запрос отправлен, в скором времени мы свяжемся с вами! \n" +
+					"Хорошего дня!"
+				msg := tgbotapi.NewMessage(update.Message.Chat.ID, reply)
+				msg.ReplyMarkup = tgbotapi.NewRemoveKeyboard(true)
+				if _, err = bot.Send(msg); err != nil {
+					panic(err)
+				}
+			}
+		} else if update.CallbackQuery != nil {
+
+			callback := tgbotapi.NewCallback(update.CallbackQuery.ID, update.CallbackQuery.Data)
+			if _, err := bot.Request(callback); err != nil {
+				panic(err)
+			}
+
+			msg := tgbotapi.NewMessage(update.CallbackQuery.Message.Chat.ID, update.CallbackQuery.Data)
+
+			switch update.CallbackQuery.Data {
+			case "Выберите тип проблемы":
+				msg.ReplyMarkup = KeyBoard
+
+			case "Выберете тип языка":
+				msg.ReplyMarkup = TypeLanguage
+
+			case "Интеграция":
+				reply := "Опишите вашу проблему"
+				msg := tgbotapi.NewMessage(update.CallbackQuery.Message.Chat.ID, reply)
+				msg.ReplyMarkup = PostKeyBoard
+				for newUpdate := range updates {
+					if newUpdate.Message != nil {
+						txt := newUpdate.Message.Chat.FirstName + " " + newUpdate.Message.Chat.LastName + "\n" + "@" + newUpdate.Message.Chat.UserName + "\n" + newUpdate.Message.Text
+						msg = tgbotapi.NewMessageToChannel("1661385575", txt)
+
+						if _, err := bot.Send(msg); err != nil {
+							panic(err)
+						}
+					}
+				}
+			case "Тесты":
+				msg.ReplyMarkup = PostKeyBoard
+				for newUpdate := range updates {
+					if newUpdate.Message != nil {
+						txt := newUpdate.Message.Chat.FirstName + " " + newUpdate.Message.Chat.LastName + "\n" + "@" + newUpdate.Message.Chat.UserName + "\n" + newUpdate.Message.Text
+						msg = tgbotapi.NewMessageToChannel("1661385575", txt)
+
+						if _, err := bot.Send(msg); err != nil {
+							panic(err)
+						}
+					}
+				}
+			case "Трафик":
+				msg.ReplyMarkup = PostKeyBoard
+				for newUpdate := range updates {
+					if newUpdate.Message != nil {
+						txt := newUpdate.Message.Chat.FirstName + " " + newUpdate.Message.Chat.LastName + "\n" + "@" + newUpdate.Message.Chat.UserName + "\n" + newUpdate.Message.Text
+						msg = tgbotapi.NewMessageToChannel("1661385575", txt)
+
+						if _, err := bot.Send(msg); err != nil {
+							panic(err)
+						}
+					}
+				}
+			case "Другое":
+				msg.ReplyMarkup = PostKeyBoard
+				for newUpdate := range updates {
+					if newUpdate.Message != nil {
+						txt := newUpdate.Message.Chat.FirstName + " " + newUpdate.Message.Chat.LastName + "\n" + "@" + newUpdate.Message.Chat.UserName + "\n" + newUpdate.Message.Text
+						msg = tgbotapi.NewMessageToChannel("1661385575", txt)
+
+						if _, err := bot.Send(msg); err != nil {
+							panic(err)
+						}
+					}
+				}
+			case "Java":
+				for newUpdate := range updates {
+					if newUpdate.Message == nil {
+						continue
+					}
+
+					txt := newUpdate.Message.Text
+					text := MakeRequest()
+					log.Printf(text)
+					msg = tgbotapi.NewMessage(newUpdate.Message.Chat.ID, text)
+					log.Printf(txt)
+					if _, err := bot.Send(msg); err != nil {
+						panic(err)
+					}
+				}
+
+			case "Go":
+				for newUpdate := range updates {
+					if newUpdate.Message == nil {
+						continue
+					}
+
+					txt := newUpdate.Message.Text
+					text := MakeRequest()
+					log.Printf(text)
+					msg = tgbotapi.NewMessage(newUpdate.Message.Chat.ID, text)
+					log.Printf(txt)
+					if _, err := bot.Send(msg); err != nil {
+						panic(err)
+					}
+				}
+			case "Отправить запрос":
+				text := "Спасибо, запрос принят"
+				msg = tgbotapi.NewMessage(update.CallbackQuery.Message.Chat.ID, text)
+				msg.ReplyMarkup = StartKeyBoard
+			}
+
+			if _, err := bot.Send(msg); err != nil {
+				panic(err)
+				log.Panic(err)
+			}
+		}
+
+
+		case "Java":
+
+        				reply := "Вы выбрали язык Java, отправьте нужные данные и подпись сгенерируется"
+        				msg = tgbotapi.NewMessage(update.CallbackQuery.Message.Chat.ID, reply)
+        				if _, err := bot.Send(msg); err != nil {
+        					panic(err)
+        				}
+        				for newUpdate := range updates {
+        					if newUpdate.Message == nil {
+        						continue
+        					}
+        					txt := newUpdate.Message.Text
+        					log.Printf(txt)
+        					msg := tgbotapi.NewMessage(newUpdate.Message.Chat.ID, CreateSignature(txt))
+        					if _, err := bot.Send(msg); err != nil {
+        						panic(err)
+        					}
+        					break
+        				}
+
+        			case "Go":
+        				reply := "Вы выбрали язык Go, отправьте message и key, которые разделены запятой и  подпись сгенерируется"
+        				msg = tgbotapi.NewMessage(update.CallbackQuery.Message.Chat.ID, reply)
+        				if _, err := bot.Send(msg); err != nil {
+        					panic(err)
+        				}
+        				for newUpdate := range updates {
+        					if newUpdate.Message == nil {
+        						continue
+        					}
+        					txt := newUpdate.Message.Text
+        					log.Printf(txt)
+        					msg := tgbotapi.NewMessage(newUpdate.Message.Chat.ID, CreateSignature(txt))
+        					if _, err := bot.Send(msg); err != nil {
+        						panic(err)
+        					}
+        					break
+        				}
+
+        				case "Запрос отправлен":
+                        				replay := "Ваш запрос отправлен, в скором времени мы решим вашу проблему и свяжемся с вами!" +
+                        					"Если у вас остались вопросы, нажмите на команду /main для возвращения в главное меню"
+                        				msg = tgbotapi.NewMessage(update.CallbackQuery.Message.Chat.ID, replay)
+                        				msg.ReplyMarkup = toMainTheme
+
+                        				if _, err := bot.Send(msg); err != nil {
+                        					log.Panic(err)
+                        				}
+
+                        				if newUpdate.CallbackQuery.Data == "Меню" {
+                                        						msg.ReplyMarkup = StartKeyBoard
+                                        						reply := "Вы вернулись в главное меню, нажмите команду ниже для вызова клавиатуры \n/main"
+                                        						msg = tgbotapi.NewMessage(update.CallbackQuery.Message.Chat.ID, reply)
+                                        						tgUtil.SendBotMessage(msg, bot)
+                                        						break
+                                        					}
+
+
+ФУНКЦИОНАЛ ДЛЯ СВЯЗИ С ТП И ЗАНЕСЕНИЕ ЗАЯВОК В БД
+
+case "Выберите тип проблемы":
+				msg.ReplyMarkup = KeyBoard
+				tgUtil.SendBotMessage(msg, bot)
+
+
+
+/
+*/
+
+
+for newUpdate := range updates {
+					if newUpdate.CallbackQuery != nil {
+
+						callback := tgbotapi.NewCallback(newUpdate.CallbackQuery.ID, newUpdate.CallbackQuery.Data)
+						if _, err := bot.Request(callback); err != nil {
+							logrus.Panic(err)
+						}
+						if newUpdate.Message != nil {
+							txt := newUpdate.Message.Chat.FirstName + " " +
+								"" + newUpdate.Message.Chat.LastName + "" +
+								"\n" + "@" + newUpdate.Message.Chat.UserName + "\n" + newUpdate.Message.Text
+							msg = tgbotapi.NewMessage(update.CallbackQuery.Message.Chat.ID, tgUtil.SaveIntegrationMessage(newUpdate, repo))
+							tgUtil.SendBotMessage(msg, bot)
+							msg = tgbotapi.NewMessageToChannel("1661385575", txt)
+							replay := "Ваш запрос отправлен, в скором времени мы решим вашу проблему и свяжемся с вами!" +
+								"Если у вас остались вопросы, нажмите на команду /main для возвращения в главное меню"
+							msg = tgbotapi.NewMessage(update.CallbackQuery.Message.Chat.ID, replay)
+							msg.ReplyMarkup = toMainTheme
+							tgUtil.SendBotMessage(msg, bot)
+							break
+							//tgUtil.SendBotMessage(msg, bot)
+						}
+
+					}
+					break
+				}
+
+case "Интеграция":
+				reply := "Вы в разделе \"Интеграция\".\nОпишите вашу проблему"
+				msg := tgbotapi.NewMessage(update.CallbackQuery.Message.Chat.ID, reply)
+				msg.ReplyMarkup = toMainTheme
+				tgUtil.SendBotMessage(msg, bot)
+
+				for newUpdate := range updates {
+					if newUpdate.CallbackQuery != nil {
+
+						callback := tgbotapi.NewCallback(newUpdate.CallbackQuery.ID, newUpdate.CallbackQuery.Data)
+						if _, err := bot.Request(callback); err != nil {
+							logrus.Panic(err)
+						}
+						switch newUpdate.CallbackQuery.Data {
+						case "Меню":
+							logrus.Printf(newUpdate.CallbackQuery.Data)
+							replay := "Вы в главном меню, выберете на экране интересующий вас вопрос \n" +
+								"\n /commands - список команд"
+							msg := tgbotapi.NewMessage(newUpdate.CallbackQuery.Message.Chat.ID, replay)
+							msg.ReplyMarkup = StartKeyBoard
+							tgUtil.SendBotMessage(msg, bot)
+
+						}
+					} else {
+						txt := newUpdate.Message.Chat.FirstName + " " + newUpdate.Message.Chat.LastName + "\n" + "@" + newUpdate.Message.Chat.UserName + "\n" + newUpdate.Message.Text
+						replay := "Ваш запрос зарегестрирован и ему присвоен uuid:"
+						msg = tgbotapi.NewMessage(update.CallbackQuery.Message.Chat.ID, replay+"\n"+tgUtil.SaveIntegrationMessage(newUpdate, repo))
+						msg.ReplyMarkup = toMainTheme
+						tgUtil.SendBotMessage(msg, bot)
+						msg.ReplyMarkup = toMainTheme
+						msg = tgbotapi.NewMessageToChannel("1661385575", txt)
+						tgUtil.SendBotMessage(msg, bot)
+					}
+					break
+				}
+			case "Тесты":
+				reply := "Вы в разделе \"Тесты\".\nОпишите вашу проблему"
+				msg := tgbotapi.NewMessage(update.CallbackQuery.Message.Chat.ID, reply)
+				msg.ReplyMarkup = toMainTheme
+				tgUtil.SendBotMessage(msg, bot)
+
+				for newUpdate := range updates {
+
+					if newUpdate.CallbackQuery != nil {
+
+						callback := tgbotapi.NewCallback(newUpdate.CallbackQuery.ID, newUpdate.CallbackQuery.Data)
+						if _, err := bot.Request(callback); err != nil {
+							logrus.Panic(err)
+						}
+						switch newUpdate.CallbackQuery.Data {
+						case "Меню":
+							logrus.Printf(newUpdate.CallbackQuery.Data)
+							replay := "Вы в главном меню, выберете на экране интересующий вас вопрос \n" +
+								"\n /commands - список команд"
+							msg := tgbotapi.NewMessage(newUpdate.CallbackQuery.Message.Chat.ID, replay)
+							msg.ReplyMarkup = StartKeyBoard
+							tgUtil.SendBotMessage(msg, bot)
+
+						}
+					} else {
+						txt := newUpdate.Message.Chat.FirstName + " " + newUpdate.Message.Chat.LastName + "\n" + "@" + newUpdate.Message.Chat.UserName + "\n" + newUpdate.Message.Text
+						replay := "Ваш запрос зарегестрирован и ему присвоен uuid:"
+						msg := tgbotapi.NewMessage(update.CallbackQuery.Message.Chat.ID, replay+"\n"+tgUtil.SaveTestMessage(newUpdate, repo))
+						msg.ReplyMarkup = toMainTheme
+						tgUtil.SendBotMessage(msg, bot)
+						msg = tgbotapi.NewMessageToChannel("1661385575", txt)
+						tgUtil.SendBotMessage(msg, bot)
+					}
+					break
+				}
+			case "Трафик":
+				reply := "Вы в разделе \"Трафик\".\nОпишите вашу проблему"
+				msg := tgbotapi.NewMessage(update.CallbackQuery.Message.Chat.ID, reply)
+				msg.ReplyMarkup = toMainTheme
+				tgUtil.SendBotMessage(msg, bot)
+
+				for newUpdate := range updates {
+
+					if newUpdate.CallbackQuery != nil {
+
+						callback := tgbotapi.NewCallback(newUpdate.CallbackQuery.ID, newUpdate.CallbackQuery.Data)
+						if _, err := bot.Request(callback); err != nil {
+							logrus.Panic(err)
+						}
+						switch newUpdate.CallbackQuery.Data {
+						case "Меню":
+							logrus.Printf(newUpdate.CallbackQuery.Data)
+							replay := "Вы в главном меню, выберете на экране интересующий вас вопрос \n" +
+								"\n /commands - список команд"
+							msg := tgbotapi.NewMessage(newUpdate.CallbackQuery.Message.Chat.ID, replay)
+							msg.ReplyMarkup = StartKeyBoard
+							tgUtil.SendBotMessage(msg, bot)
+
+						}
+					} else {
+						txt := newUpdate.Message.Chat.FirstName + " " + newUpdate.Message.Chat.LastName + "\n" + "@" + newUpdate.Message.Chat.UserName + "\n" + newUpdate.Message.Text
+						replay := "Ваш запрос зарегестрирован и ему присвоен uuid:"
+						msg := tgbotapi.NewMessage(update.CallbackQuery.Message.Chat.ID, replay+"\n"+tgUtil.SaveTrafficMessage(newUpdate, repo))
+						msg.ReplyMarkup = toMainTheme
+						tgUtil.SendBotMessage(msg, bot)
+						msg = tgbotapi.NewMessageToChannel("1661385575", txt)
+						tgUtil.SendBotMessage(msg, bot)
+					}
+					break
+				}
+			case "Другое":
+				reply := "Вы в разделе \"Другое\" \nОпишите вашу проблему"
+				msg := tgbotapi.NewMessage(update.CallbackQuery.Message.Chat.ID, reply)
+				msg.ReplyMarkup = toMainTheme
+
+				tgUtil.SendBotMessage(msg, bot)
+
+				for newUpdate := range updates {
+
+					if newUpdate.CallbackQuery != nil {
+
+						callback := tgbotapi.NewCallback(newUpdate.CallbackQuery.ID, newUpdate.CallbackQuery.Data)
+						if _, err := bot.Request(callback); err != nil {
+							logrus.Panic(err)
+						}
+						switch newUpdate.CallbackQuery.Data {
+						case "Меню":
+							logrus.Printf(newUpdate.CallbackQuery.Data)
+							replay := "Вы в главном меню, выберете на экране интересующий вас вопрос \n" +
+								"\n /commands - список команд"
+							msg := tgbotapi.NewMessage(newUpdate.CallbackQuery.Message.Chat.ID, replay)
+							msg.ReplyMarkup = StartKeyBoard
+							tgUtil.SendBotMessage(msg, bot)
+
+						}
+					} else {
+						txt := newUpdate.Message.Chat.FirstName + " " + newUpdate.Message.Chat.LastName + "\n" + "@" + newUpdate.Message.Chat.UserName + "\n" + newUpdate.Message.Text
+						replay := "Ваш запрос зарегестрирован и ему присвоен uuid:"
+						msg := tgbotapi.NewMessage(update.CallbackQuery.Message.Chat.ID, replay+"\n"+tgUtil.SaveOtherMessage(newUpdate, repo))
+						msg.ReplyMarkup = toMainTheme
+						tgUtil.SendBotMessage(msg, bot)
+						msg = tgbotapi.NewMessageToChannel("1661385575", txt)
+						tgUtil.SendBotMessage(msg, bot)
+					}
+					break
+				}
